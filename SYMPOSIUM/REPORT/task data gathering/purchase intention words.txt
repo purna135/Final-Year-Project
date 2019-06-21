@@ -1,0 +1,48 @@
+purchase intention words
+
+PI
+--------------------
+purchase
+buy
+wish
+want
+need
+like
+love
+deal
+nice
+get
+cheap
+buy now
+Discount
+Affordable
+Best
+Cheapest
+--------------------
+
+No PI
+--------------------
+bad
+hate
+won't buy
+dislike
+don't buy
+boring
+useless
+not recommended
+not worth it
+--------------------
+
+To remove
+--------------------
+accessories
+case
+--------------------
+
+Relevant Query 18/5/2019:
+scrapy crawl TweetScraper -a query="iphone x, purchase OR buy OR wish OR want OR need OR like OR love OR affordable OR deal OR nice OR get OR cheap -accessories -case"
+---------------------------------------------------------
+___________________________
+iPhone X/First released
+November 3, 2017
+----------------------------
