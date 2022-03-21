@@ -62,7 +62,7 @@ def report_results(model, X, y):
     rec = recall_score(y, pred)
     tn, fp, fn, tp = confusion_matrix(y, pred).ravel()
     TrueNeg = tn / (tn + fp)
-    result = {
+    return {
         "auc": auc,
         "f1": f1,
         "acc": acc,
@@ -74,7 +74,6 @@ def report_results(model, X, y):
         "TP": tp,
         "True Negative rate": TrueNeg,
     }
-    return result
 
 
 
@@ -106,9 +105,7 @@ def output_to_results(pathData):
     final_data_frame["text"] = final_data_frame["text"].apply(
         lambda x: " ".join([Word(word).lemmatize() for word in x.split()])
     )
-    corpus = []
-    for text in final_data_frame["text"]:
-        corpus.append(text)
+    corpus = list(final_data_frame["text"])
     final_data_frame.rename(columns={"class": "class_label"}, inplace=True)
     Class_Label = {"yes": 1, "no": 0}
     final_data_frame.class_label = [
@@ -140,13 +137,7 @@ def output_to_results(pathData):
     stats_logistic = report_results(logisticReg, X_test, Y_test)
     stats_dtc = report_results(dtc, X_test, Y_test)
     stats_neural = report_results(neural_network, X_test, Y_test)
-    stats = []
-    stats.append(stats_SVM)
-    stats.append(stats_Naive)
-    stats.append(stats_logistic)
-    stats.append(stats_dtc)
-    stats.append(stats_neural)
-    return stats
+    return [stats_SVM, stats_Naive, stats_logistic, stats_dtc, stats_neural]
 
 
 def hello_world():
@@ -158,10 +149,6 @@ def hello():
 def read_dir():
     
     path = "uploadeddata\\"
-    files = []
-    # r=root, d=directories, f = files
-    for r, d, f in os.walk(path):
-        files.append(f)
-    return files
+    return [f for r, d, f in os.walk(path)]
 
 print(output_to_results("uploadeddata/AnnotatedData3.csv"))

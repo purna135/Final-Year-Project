@@ -12,10 +12,10 @@ class DocumentVector:
         # idf_df = pd.DataFrame()
         total_docs = len(tf_df.index)
         for column in unique:
-            num_doc_word = 0
-            for no_doc in range(total_docs):
-                if tf_df.at[no_doc, column] > 0:
-                    num_doc_word += 1
+            num_doc_word = sum(
+                tf_df.at[no_doc, column] > 0 for no_doc in range(total_docs)
+            )
+
             # print(num_doc_word)
             idf = math.log(total_docs / (num_doc_word + 1))
             # idf_df.at[0,column] = idf
@@ -28,34 +28,27 @@ class DocumentVector:
         data = np.zeros([final_df["class"].count(), len(uniqueWords)])
         docVector1 = pd.DataFrame(data, columns=uniqueWords)
         docVector = docVector1.assign(PurchaseIntention=list(final_df["class"]))
-        # docVector['Purchase Intention'] = final_df['class']
-        # print(docVector['PurchaseIntention'])
-        doc_count = 0
-        for doc in final_df["text"]:
+        for doc_count, doc in enumerate(final_df["text"]):
             words = doc.split()
             for word in words:
                 temp = word.lower()
                 if temp in docVector.columns:
                     docVector.at[doc_count, temp] += 1
-            doc_count += 1
-
         return docVector
 
     def binary_docvector(self, final_df, uniqueWords):
         data = np.zeros([final_df["class"].count(), len(uniqueWords)])
         docVector1 = pd.DataFrame(data, columns=uniqueWords)
         docVector = docVector1.assign(PurchaseIntention=list(final_df["class"]))
-        # docVector['Purchase Intention'] = final_df['class']
-        # print(docVector['PurchaseIntention'])
-        doc_count = 0
-        for doc in final_df["text"]:
+        for doc_count, doc in enumerate(final_df["text"]):
             words = doc.split()
             for word in words:
                 temp = word.lower()
-                if temp in docVector.columns:
-                    if docVector.iloc[doc_count][temp] < 1:
-                        docVector.at[doc_count, temp] += 1
-            doc_count += 1
+                if (
+                    temp in docVector.columns
+                    and docVector.iloc[doc_count][temp] < 1
+                ):
+                    docVector.at[doc_count, temp] += 1
         # print(docVector['good'])
         return docVector
 

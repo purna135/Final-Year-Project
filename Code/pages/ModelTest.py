@@ -110,9 +110,7 @@ def data_preprocessing(final_data_frame):
     # -----------------------------------------------------------------------
     # BUILDING THE CORPUS
     # -----------------------------------------------------------------------
-    corpus = []
-    for text in final_data_frame["text"]:
-        corpus.append(text)
+    corpus = list(final_data_frame["text"])
     # -----------------------------------------------------------------------
     # CHANGE CLASS VALUES FROM YES/NO TO 0/1
     # -----------------------------------------------------------------------
@@ -154,7 +152,7 @@ def output_to_results(pathData_train, pathData_test, doc_vector, model, l1, l2, 
     X_train = vectorized_data_train
     X_test = vectorized_data_test
     Y_train = train_data["class"].values
-    Y_test = test_data["class"].values    
+    Y_test = test_data["class"].values
     # -----------------------------------------------------------------------
     # Select model to train and display stats
     # -----------------------------------------------------------------------
@@ -181,14 +179,14 @@ def output_to_results(pathData_train, pathData_test, doc_vector, model, l1, l2, 
         )
         neural_network.fit(X_train, Y_train)
         stats, pred, pred_proba= report_results(neural_network, X_test, Y_test)
-        
+
     # -----------------------------------------------------------------------
     test_data['Predicted Class'] = pred.tolist()
     test_data['score'] = pred_proba.tolist()
     # print(test_data['score'])
     test_data = test_data.drop(['text'], axis=1)
     # print(test_data)
-    
+
     test_data['class'].replace(0,"no",inplace=True)
     test_data['class'].replace(1,"yes",inplace=True)
     test_data['Predicted Class'].replace(0,"no",inplace=True)
@@ -204,14 +202,14 @@ def output_to_results(pathData_train, pathData_test, doc_vector, model, l1, l2, 
     for score in potential_df['score']:
         if score >= int(l1)/100:
             level.append("1")
-        elif score >= int(l2)/100 and score < int(l1)/100:
-            level.append("2") 
-        elif score < int(l2)/100:
-            level.append("3") 
+        elif score >= int(l2) / 100:
+            level.append("2")
+        else:
+            level.append("3")
     # print(level)          
-    potential_df['Levels'] = level 
+    potential_df['Levels'] = level
     potential_df.sort_values(by=['score'], inplace=True, ascending=False)
-    pie_data = potential_df['Levels'].value_counts()         
+    pie_data = potential_df['Levels'].value_counts()
     return stats, test_data, potential_df, pie_data
 
 

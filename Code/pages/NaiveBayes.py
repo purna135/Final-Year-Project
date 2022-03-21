@@ -55,8 +55,7 @@ class NaiveBayesModel:
         predict_df = pd.DataFrame()
         weighPI = Prob_PI
         weighNoPI = Prob_NoPI
-        count_test = 0
-        for sentence in df_test['text']:
+        for count_test, sentence in enumerate(df_test['text']):
             # print(count_test)
             for word in sentence.lower().split():
                 if word in uniqueWords:
@@ -66,14 +65,10 @@ class NaiveBayesModel:
                     weighPI = weighPI * (1 / (numWordsInPI + len(uniqueWords)))
                     weighNoPI = weighNoPI * (1 / (numWordsInNoPI + len(uniqueWords)))
             predict_df.at[count_test, 'WeightPI'] = weighPI
-            if weighPI > weighNoPI:
-                predict_df.at[count_test, 'PredictedClass'] = 'yes'
-                # print(test_data.at[count_test,'text'],test_data.at[count_test,'PredictedClass'])
-            else:
-                predict_df.at[count_test, 'PredictedClass'] = 'no'
-                # print(test_data.at[count_test,'text'],test_data.at[count_test,'PredictedClass'])
+            predict_df.at[count_test, 'PredictedClass'] = (
+                'yes' if weighPI > weighNoPI else 'no'
+            )
 
-            count_test += 1
             weighPI = Prob_PI
             weighNoPI = Prob_NoPI
         return predict_df, df_test

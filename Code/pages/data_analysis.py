@@ -21,13 +21,11 @@ def extract(path):
     return final_df, df
  
 def remove_punc(temp_df):
-        count = 0
-        for text in temp_df['text']:
-            out = re.sub(r'[^\w\s]', '', text)
-            temp_df.at[count,'text'] = out
-            temp_df.at[count, 'class'] = temp_df.iloc[count]['class']
-            count += 1
-        return temp_df
+    for count, text in enumerate(temp_df['text']):
+        out = re.sub(r'[^\w\s]', '', text)
+        temp_df.at[count,'text'] = out
+        temp_df.at[count, 'class'] = temp_df.iloc[count]['class']
+    return temp_df
 
 
 def output_to_analysis(path):
@@ -35,7 +33,7 @@ def output_to_analysis(path):
     final_data_frame, data_frame_undefined = extract(path)
     # show count of yes/no
     # final_data_frame = remove_punc(final_data_frame)
-    final_data_frame_temp = final_data_frame.iloc[0:100]
+    final_data_frame_temp = final_data_frame.iloc[:100]
     class_count = final_data_frame['class'].value_counts()
     stop = stopwords.words("english")
     stop.append("I")

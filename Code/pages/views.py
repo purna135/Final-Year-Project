@@ -12,88 +12,78 @@ def dashboard(request):
     return render(request, "dashboard.html", {})
    
 def upload_annotate(request):
-        from pages.StandardProcessing import  read_dir
-        template = "annotate.html"
-        if request.method == "GET":
-                return render(request, template,{"files" : read_dir})
-     
-        csv_file = request.FILES['file']
-        filename = csv_file.name
+    from pages.StandardProcessing import  read_dir
+    template = "annotate.html"
+    if request.method == "GET":
+            return render(request, template,{"files" : read_dir})
 
-        if not csv_file.name.endswith('.csv'):
-                messages.error(request,"This is not csv file")
-                err = 1
-                return render(request, template, {"error":err, "files" : read_dir})
-                
-        if csv_file.name.endswith('.csv'):
-                dataset = csv_file.read().decode('ascii','ignore')
-                io_string = io.StringIO(dataset)
-                io_string1 = io.StringIO(dataset)
-                temp_count = 0       
-                row1 = csv.reader(io_string, delimiter=',',quotechar="|")
-                flag_valid = 0
-                for row_data in row1:
-                        if temp_count == 0:
-                                temp_list =  [x.lower() for x in row_data] 
-                                if(set(["class","text"]).issubset(set(temp_list))): 
-                                        flag_valid = 1
-                                else:
-                                        flag_valid = 0
-                                break            
+    csv_file = request.FILES['file']
+    filename = csv_file.name
+
+    if not csv_file.name.endswith('.csv'):
+            messages.error(request,"This is not csv file")
+            err = 1
+            return render(request, template, {"error":err, "files" : read_dir})
+
+    if csv_file.name.endswith('.csv'):
+        dataset = csv_file.read().decode('ascii','ignore')
+        io_string = io.StringIO(dataset)
+        io_string1 = io.StringIO(dataset)
+        temp_count = 0
+        row1 = csv.reader(io_string, delimiter=',',quotechar="|")
+        flag_valid = 0
+        for row_data in row1:
+            if temp_count == 0:
+                temp_list =  [x.lower() for x in row_data]
+                flag_valid = 1 if {"class", "text"}.issubset(set(temp_list)) else 0
+                break            
 
 
-                if flag_valid == 1:
-                        with open('uploadeddata/'+filename, 'w', encoding='ascii') as csvfile:
-                                filewriter = csv.writer(csvfile, delimiter=',',quotechar='|', quoting=csv.QUOTE_MINIMAL)                        
-                                for row in csv.reader(io_string1, delimiter=',',quotechar="|"):
-                                        filewriter.writerow(row)                                       
-                                copied = 1            
-                                return render(request, template, {"success":copied, "files" : read_dir})
-                elif flag_valid == 0:
-                        err = 1                
-                        return render(request, template, {"error":err, "files" : read_dir})
+        if flag_valid == 0:
+            return render(request, template, {"error": 1, "files": read_dir})
+        elif flag_valid == 1:
+            with open(f'uploadeddata/{filename}', 'w', encoding='ascii') as csvfile:
+                filewriter = csv.writer(csvfile, delimiter=',',quotechar='|', quoting=csv.QUOTE_MINIMAL)
+                for row in csv.reader(io_string1, delimiter=',',quotechar="|"):
+                        filewriter.writerow(row)
+                return render(request, template, {"success": 1, "files": read_dir})
 
 def upload_test(request):
-        from pages.StandardProcessing import  read_dir
-        template = "test.html"
-        if request.method == "GET":
-                return render(request, template,{"files" : read_dir})
-     
-        csv_file = request.FILES['file']
-        filename = csv_file.name
+    from pages.StandardProcessing import  read_dir
+    template = "test.html"
+    if request.method == "GET":
+            return render(request, template,{"files" : read_dir})
 
-        if not csv_file.name.endswith('.csv'):
-                messages.error(request,"This is not csv file")
-                err = 1
-                return render(request, template, {"error":err, "files" : read_dir})
-                
-        if csv_file.name.endswith('.csv'):
-                dataset = csv_file.read().decode('ascii','ignore')
-                io_string = io.StringIO(dataset)
-                io_string1 = io.StringIO(dataset)
-                temp_count = 0       
-                row1 = csv.reader(io_string, delimiter=',',quotechar="|")
-                flag_valid = 0
-                for row_data in row1:
-                        if temp_count == 0:
-                                temp_list =  [x.lower() for x in row_data] 
-                                if(set(["class","text"]).issubset(set(temp_list))): 
-                                        flag_valid = 1
-                                else:
-                                        flag_valid = 0
-                                break            
+    csv_file = request.FILES['file']
+    filename = csv_file.name
+
+    if not csv_file.name.endswith('.csv'):
+            messages.error(request,"This is not csv file")
+            err = 1
+            return render(request, template, {"error":err, "files" : read_dir})
+
+    if csv_file.name.endswith('.csv'):
+        dataset = csv_file.read().decode('ascii','ignore')
+        io_string = io.StringIO(dataset)
+        io_string1 = io.StringIO(dataset)
+        temp_count = 0
+        row1 = csv.reader(io_string, delimiter=',',quotechar="|")
+        flag_valid = 0
+        for row_data in row1:
+            if temp_count == 0:
+                temp_list =  [x.lower() for x in row_data]
+                flag_valid = 1 if {"class", "text"}.issubset(set(temp_list)) else 0
+                break            
 
 
-                if flag_valid == 1:
-                        with open('uploadeddata/'+filename, 'w', encoding='ascii') as csvfile:
-                                filewriter = csv.writer(csvfile, delimiter=',',quotechar='|', quoting=csv.QUOTE_MINIMAL)                        
-                                for row in csv.reader(io_string1, delimiter=',',quotechar="|"):
-                                        filewriter.writerow(row)                                       
-                                copied = 1            
-                                return render(request, template, {"success":copied, "files" : read_dir})
-                elif flag_valid == 0:
-                        err = 1                
-                        return render(request, template, {"error":err, "files" : read_dir})
+        if flag_valid == 0:
+            return render(request, template, {"error": 1, "files": read_dir})
+        elif flag_valid == 1:
+            with open(f'uploadeddata/{filename}', 'w', encoding='ascii') as csvfile:
+                filewriter = csv.writer(csvfile, delimiter=',',quotechar='|', quoting=csv.QUOTE_MINIMAL)
+                for row in csv.reader(io_string1, delimiter=',',quotechar="|"):
+                        filewriter.writerow(row)
+                return render(request, template, {"success": 1, "files": read_dir})
 
 
 def analysis(request):    

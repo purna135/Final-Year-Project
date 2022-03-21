@@ -105,7 +105,7 @@ def binary_naive_bayes_kfold():
     fscore = []
     true_neg = []
     stats = em.Evaluate()
-    for count in range(5):
+    for _ in range(5):
         start = start+200
         end = end + 200
         df_test, df_train = split(final_df, start, end)
@@ -123,7 +123,6 @@ def binary_naive_bayes_kfold():
         recall.append(stats.Recall(TP, FN))
         fscore.append(stats.fScore(TP, FN, FP))
         true_neg.append(stats.TrueNegative(TN,FP))
-        # print("---------------------------------------------------------------------")
     print("---------------------------------------------------------------------")
     print("Binary Naive Bayes wit k-fold Accuracy Stats")
     print("accuracy = ",accuracy)

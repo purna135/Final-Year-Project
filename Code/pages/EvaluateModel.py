@@ -17,25 +17,24 @@ class Evaluate:
         return TP, FN, TN, FP
 
     def Accuracy(self, TP, TN, FP, FN):
-        accuracy = (TP + TN) / (TP + FP + FN + TN)
         # print("Accuracy =",accuracy)
-        return accuracy
+        return (TP + TN) / (TP + FP + FN + TN)
 
     def Precision(self, TP, FP):
-        precision = TP / (TP + FP)
         # print("Precision = ",precision)
-        return precision
+        return TP / (TP + FP)
 
     def Recall(self, TP, FN):
-        recall = TP / (TP + FN)
         # print("Recall = ",recall)
-        return recall
+        return TP / (TP + FN)
 
     def fScore(self, TP, FN, FP):
-        F1 = 2 * (self.Recall(TP, FN) * self.Precision(TP, FP)) / (self.Recall(TP, FN) + self.Precision(TP, FP))
         # print("f measure",F1)
-        return F1
+        return (
+            2
+            * (self.Recall(TP, FN) * self.Precision(TP, FP))
+            / (self.Recall(TP, FN) + self.Precision(TP, FP))
+        )
 
     def TrueNegative(self, TN, FP):
-        TrueNeg = TN/(TN+FP)
-        return TrueNeg
+        return TN/(TN+FP)

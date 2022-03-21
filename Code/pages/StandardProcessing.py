@@ -109,9 +109,7 @@ def output_to_results(pathData, doc_vector, model):
     # -----------------------------------------------------------------------
     # BUILDING THE CORPUS
     # -----------------------------------------------------------------------
-    corpus = []
-    for text in final_data_frame["text"]:
-        corpus.append(text)
+    corpus = list(final_data_frame["text"])
     # -----------------------------------------------------------------------
     # CHANGE CLASS VALUES FROM YES/NO TO 0/1
     # -----------------------------------------------------------------------
@@ -177,11 +175,7 @@ def output_to_results(pathData, doc_vector, model):
 def read_dir():
     
     path = "uploadeddata\\"
-    files = []
-    # r=root, d=directories, f = files
-    for r, d, f in os.walk(path):
-        files.append(f)
-    return files
+    return [f for r, d, f in os.walk(path)]
 
 
 # output_to_results("uploadeddata\AnnotatedData2.csv", "TF-IDF", "Naive Bayes")

@@ -57,7 +57,7 @@ def report_results(model, X, y):
     rec = recall_score(y, pred)
     tn, fp, fn, tp = confusion_matrix(y, pred).ravel()
     TrueNeg = tn / (tn + fp)
-    result = {
+    return {
         "auc": auc,
         "f1": f1,
         "acc": acc,
@@ -69,7 +69,6 @@ def report_results(model, X, y):
         "TP": tp,
         "True Negative rate": TrueNeg,
     }
-    return result
 
 
 # -------------------------------------------------------------------------
@@ -98,8 +97,8 @@ X, Y = generatingTrainSet()
 a = np.size(X, 0)
 X_split = int(np.size(X, 0) * 0.7)
 
-X_train = X[0:X_split]
-Y_train = Y[0:X_split]
+X_train = X[:X_split]
+Y_train = Y[:X_split]
 
 X_test = X[X_split:, :]
 Y_test = Y[X_split:]
